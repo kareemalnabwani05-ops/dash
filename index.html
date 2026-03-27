@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNShine — Premium Auto Detailing | Laval & Montreal</title>
+    <meta name="description" content="Professional-grade auto detailing, paint correction, and ceramic coating in Laval & Montreal. DashNShine restores and preserves your vehicle's finish.">
+
+    <!-- Open Graph & Twitter -->
+    <meta property="og:image" content="images/hero-car-C0yrhaEs.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="images/hero-car-C0yrhaEs.jpg">
+    <meta property="og:title" content="DashNShine — Premium Auto Detailing | Laval & Montreal">
+    <meta name="twitter:title" content="DashNShine — Premium Auto Detailing | Laval & Montreal">
+    <meta property="og:description" content="Professional-grade auto detailing, paint correction, and ceramic coating in Laval & Montreal. DashNShine restores and preserves your vehicle's finish.">
+    <meta name="twitter:description" content="Professional-grade auto detailing, paint correction, and ceramic coating in Laval & Montreal. DashNShine restores and preserves your vehicle's finish.">
+    <meta property="og:type" content="website">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="bg-background border-b border-border p-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <img src="images/logo-DnL-GQn8.png" alt="DashNShine Logo" id="logo" class="h-12 w-auto">
+            <h1 class="text-xl font-bold text-primary">DashNShine</h1>
+        </div>
+        <nav>
+            <ul class="flex gap-4">
+                <li><a href="#home" class="nav-link text-sm font-medium text-foreground">Home</a></li>
+                <li><a href="#gallery" class="nav-link text-sm font-medium text-foreground">Gallery</a></li>
+                <li><a href="#contact" class="nav-link text-sm font-medium text-foreground">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="app" class="p-6">
+
+        <section id="home" class="spa-section">
+            <section id="hero">
+                <img src="images/hero-car-C0yrhaEs.jpg" alt="Hero Car" class="w-full rounded-lg shadow-lg mb-6">
+                <div class="hero-text">
+                    <h2 class="text-4xl font-bold mb-2">Premium Auto Detailing</h2>
+                    <p class="text-lg">Serving Laval & Montreal with professional-grade services.</p>
+                </div>
+            </section>
+
+            <section id="before-after" class="mt-10">
+                <h3 class="text-3xl font-semibold mb-4">Before & After</h3>
+                <div class="before-after-container grid sm:grid-cols-2 gap-4">
+                    <div class="before bg-surface-elevated rounded-lg p-4 shadow-card">
+                        <img src="images/before-detail-pj13bi4q.jpg" alt="Before Detail" class="rounded-lg mb-2">
+                        <p>Before Detailing</p>
+                    </div>
+                    <div class="after bg-surface-elevated rounded-lg p-4 shadow-card">
+                        <img src="images/after-detail-DZfZpC0X.jpg" alt="After Detail" class="rounded-lg mb-2">
+                        <p>After Detailing</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="gallery" class="spa-section hidden">
+            <h3 class="text-3xl font-semibold mb-4">Gallery</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <img src="images/hero-car-C0yrhaEs.jpg" alt="Gallery 1" class="rounded-lg shadow-md">
+                <img src="images/before-detail-pj13bi4q.jpg" alt="Gallery 2" class="rounded-lg shadow-md">
+                <img src="images/after-detail-DZfZpC0X.jpg" alt="Gallery 3" class="rounded-lg shadow-md">
+                <img src="images/logo-DnL-GQn8.png" alt="Logo" class="rounded-lg shadow-md bg-white p-4">
+            </div>
+        </section>
+
+        <section id="contact" class="spa-section hidden">
+            <h3 class="text-3xl font-semibold mb-4">Contact</h3>
+            <p class="mb-4">Fill out the form and we’ll get back to you fast.</p>
+            <form id="contact-form" class="grid gap-4 max-w-lg">
+                <input type="text" name="name" placeholder="Your Name" required class="border border-border rounded px-3 py-2 bg-background text-foreground">
+                <input type="email" name="email" placeholder="Your Email" required class="border border-border rounded px-3 py-2 bg-background text-foreground">
+                <textarea name="message" rows="5" placeholder="Your Message" required class="border border-border rounded px-3 py-2 bg-background text-foreground"></textarea>
+                <button type="submit" class="bg-primary text-primary-foreground rounded px-4 py-2">Send Message</button>
+            </form>
+            <p id="contact-feedback" class="mt-4 text-sm text-muted-foreground"></p>
+        </section>
+
+    </main>
+
+    <!-- JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
