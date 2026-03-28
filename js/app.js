@@ -1,4 +1,4 @@
-const sections = Array.from(document.querySelectorAll('.snap-section'));
+const sections = Array.from(document.querySelectorAll('.section'));
 const navLinks = Array.from(document.querySelectorAll('.nav-link'));
 const homeBtn = document.getElementById('home-btn');
 const viewGalleryBtn = document.getElementById('view-gallery');
@@ -10,6 +10,10 @@ const modalServiceText = document.querySelector('#modal-service strong');
 const modalClose = document.getElementById('modal-close');
 const modalForm = document.getElementById('modal-form');
 const modalFeedback = document.getElementById('modal-feedback');
+
+const sliderHandle = document.getElementById('slider-handle');
+const beforeAfterSlider = document.querySelector('.before-after-slider');
+const afterImg = document.querySelector('.after-img');
 
 const stateKey = 'dashnshine-spa';
 
@@ -29,10 +33,6 @@ function setAppState(partial) {
 function applySection(sectionName) {
   const target = document.getElementById(sectionName);
   if (!target) return;
-
-  sections.forEach(section => {
-    section.classList.toggle('active', section.id === sectionName);
-  });
 
   scrollToSection(target);
   navLinks.forEach(link => {
@@ -114,6 +114,55 @@ function releaseFocus() {
     modal.removeEventListener('keydown', modal._trapHandler);
     delete modal._trapHandler;
   }
+}
+
+function initSlider() {
+  if (!sliderHandle || !beforeAfterSlider || !afterImg) return;
+
+  let isDragging = false;
+
+  function updateSlider(clientX) {
+    const rect = beforeAfterSlider.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    const percentage = (x / rect.width) * 100;
+    sliderHandle.style.left = `${percentage}%`;
+    afterImg.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+  }
+
+  sliderHandle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      updateSlider(e.clientX);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  beforeAfterSlider.addEventListener('click', (e) => {
+    updateSlider(e.clientX);
+  });
+
+  // Touch support
+  sliderHandle.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      updateSlider(e.touches[0].clientX);
+    }
+  });
+
+  document.addEventListener('touchend', () => {
+    isDragging = false;
+  });
 }
 
 navLinks.forEach(button => {
@@ -209,4 +258,5 @@ window.addEventListener('load', () => {
   }
 
   routeFromHash();
+  initSlider();
 });

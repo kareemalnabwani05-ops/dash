@@ -26,18 +26,18 @@
     </header>
 
     <main id="app" class="snap-container">
-      <section id="home" class="snap-section" data-page="home">
+      <section id="home" class="section">
         <div class="hero">
           <img src="images/hero-car-C0yrhaEs.jpg" alt="Hero Car" class="hero-img" />
           <div class="hero-content">
             <h1>Welcome to DashNShine</h1>
-            <p>Premium auto detailing experience. Scroll for modern sections in SPA mode.</p>
+            <p>Premium auto detailing experience. Scroll down to explore our services, gallery, and contact us.</p>
             <button id="view-gallery" class="btn btn-primary">Explore Gallery</button>
           </div>
         </div>
       </section>
 
-      <section id="services" class="snap-section" data-page="services">
+      <section id="services" class="section">
         <div class="section-inner">
           <h2>Our Services</h2>
           <p>High-end paint correction, ceramic coating, interior rejuvenation and full detail packages.</p>
@@ -61,20 +61,22 @@
         </div>
       </section>
 
-      <section id="gallery" class="snap-section" data-page="gallery">
+      <section id="gallery" class="section">
         <div class="section-inner">
           <h2>Gallery</h2>
-          <p>Same assets used from the old site, now in a cleaner responsive SPA layout.</p>
+          <p>Same assets used from the old site, now in a cleaner responsive layout.</p>
           <div class="gallery-grid">
             <img src="images/hero-car-C0yrhaEs.jpg" alt="Car hero" loading="lazy" />
-            <img src="images/before-detail-pj13bi4q.jpg" alt="Detail before" loading="lazy" />
-            <img src="images/after-detail-DZfZpC0X.jpg" alt="Detail after" loading="lazy" />
-            <img src="images/logo-DnL-GQn8.png" alt="Logo framed" loading="lazy" />
+            <div class="before-after-slider">
+              <img src="images/before-detail-pj13bi4q.jpg" alt="Before Detail" class="before-img" />
+              <img src="images/after-detail-DZfZpC0X.jpg" alt="After Detail" class="after-img" />
+              <div class="slider-handle" id="slider-handle"></div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="contact" class="snap-section" data-page="contact">
+      <section id="contact" class="section">
         <div class="section-inner">
           <h2>Contact Us</h2>
           <p>Send your details and we contact you back within 24h.</p>
