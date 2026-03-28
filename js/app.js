@@ -1,71 +1,156 @@
-const routes = {
-  home: document.getElementById('home'),
-  gallery: document.getElementById('gallery'),
-  contact: document.getElementById('contact')
-};
+const sections = Array.from(document.querySelectorAll('.snap-section'));
+const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+const homeBtn = document.getElementById('home-btn');
+const viewGalleryBtn = document.getElementById('view-gallery');
+const contactForm = document.getElementById('contact-form');
+const feedback = document.getElementById('feedback');
 
-const navLinks = document.querySelectorAll('.nav-link');
+const modal = document.getElementById('modal');
+const modalServiceText = document.querySelector('#modal-service strong');
+const modalClose = document.getElementById('modal-close');
+const modalForm = document.getElementById('modal-form');
+const modalFeedback = document.getElementById('modal-feedback');
 
-function setActiveNav(section) {
-  navLinks.forEach(link => {
-    const hash = link.getAttribute('href').replace('#', '');
-    if (hash === section) {
-      link.classList.add('text-primary', 'font-bold');
-      link.classList.remove('text-foreground');
-    } else {
-      link.classList.remove('text-primary', 'font-bold');
-      link.classList.add('text-foreground');
-    }
-  });
-}
+const stateKey = 'dashnshine-spa';
 
-function showSection(sectionName) {
-  if (!routes[sectionName]) sectionName = 'home';
-
-  Object.values(routes).forEach(section => {
-    section.classList.add('hidden');
-  });
-
-  routes[sectionName].classList.remove('hidden');
-  setActiveNav(sectionName);
-  document.title = `DashNShine — ${sectionName[0].toUpperCase() + sectionName.slice(1)}`;
-}
-
-function routeFromLocation() {
-  const hash = window.location.hash.replace('#', '');
-  if (hash && routes[hash]) {
-    showSection(hash);
-  } else {
-    showSection('home');
+function getAppState() {
+  try {
+    return JSON.parse(localStorage.getItem(stateKey)) || {};
+  } catch (err) {
+    return {};
   }
 }
 
-window.addEventListener('popstate', routeFromLocation);
-window.addEventListener('hashchange', routeFromLocation);
+function setAppState(partial) {
+  const state = { ...getAppState(), ...partial };
+  localStorage.setItem(stateKey, JSON.stringify(state));
+}
 
-navLinks.forEach(link => {
-  link.addEventListener('click', ev => {
-    ev.preventDefault();
-    const target = link.getAttribute('href').replace('#', '');
-    if (window.history && window.history.pushState) {
-      history.pushState(null, '', `#${target}`);
-    } else {
-      window.location.hash = target;
-    }
-    showSection(target);
+function applySection(sectionName) {
+  const target = document.getElementById(sectionName);
+  if (!target) return;
+
+  sections.forEach(section => {
+    section.classList.toggle('active', section.id === sectionName);
+  });
+
+  scrollToSection(target);
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.dataset.target === sectionName);
+  });
+  document.title = `DashNShine — ${sectionName[0].toUpperCase() + sectionName.slice(1)}`;
+  setAppState({ currentPage: sectionName });
+}
+
+function scrollToSection(el) {
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetApp() {
+  localStorage.removeItem(stateKey);
+  if (contactForm) contactForm.reset();
+  if (modalForm) modalForm.reset();
+  feedback.textContent = '';
+  modalFeedback.textContent = '';
+  window.location.hash = '#home';
+  window.location.reload();
+}
+
+function routeFromHash() {
+  const hashPage = window.location.hash.replace('#', '');
+  const state = getAppState();
+  const targetSection = hashPage || state.currentPage || 'home';
+  window.location.hash = `#${targetSection}`;
+  applySection(targetSection);
+}
+
+function showModal(service) {
+  if (!modal) return;
+  modalServiceText.textContent = service;
+  modal.classList.remove('hidden');
+  modalFeedback.textContent = '';
+}
+
+function hideModal() {
+  if (!modal) return;
+  modal.classList.add('hidden');
+}
+
+navLinks.forEach(button => {
+  button.addEventListener('click', () => {
+    const target = button.dataset.target;
+    window.location.hash = `#${target}`;
+    applySection(target);
   });
 });
 
-const contactForm = document.getElementById('contact-form');
-const contactFeedback = document.getElementById('contact-feedback');
+homeBtn.addEventListener('click', resetApp);
+viewGalleryBtn.addEventListener('click', () => {
+  window.location.hash = '#gallery';
+  applySection('gallery');
+});
 
-if (contactForm) {
-  contactForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    contactFeedback.textContent = 'Thanks! Your message has been submitted (demo mode).';
-    contactFeedback.classList.add('text-gold');
-    contactForm.reset();
+const bookButtons = Array.from(document.querySelectorAll('.book-now'));
+bookButtons.forEach(btn => {
+  btn.addEventListener('click', () => showModal(btn.dataset.service));
+});
+
+if (modalClose) {
+  modalClose.addEventListener('click', hideModal);
+}
+
+if (modal) {
+  modal.addEventListener('click', event => {
+    if (event.target.matches('[data-close]')) hideModal();
   });
 }
 
-routeFromLocation();
+if (modalForm) {
+  modalForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const data = new FormData(modalForm);
+    const payload = {
+      service: modalServiceText.textContent,
+      details: Object.fromEntries(data.entries()),
+      submittedAt: new Date().toISOString(),
+    };
+
+    const state = getAppState();
+    const history = Array.isArray(state.bookingHistory) ? state.bookingHistory : [];
+    setAppState({ bookingHistory: [...history, payload] });
+
+    modalFeedback.textContent = 'Booking request sent! We will follow up soon.';
+    modalForm.reset();
+
+    setTimeout(hideModal, 1500);
+  });
+}
+
+if (contactForm) {
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const data = new FormData(contactForm);
+    setAppState({ savedForm: Object.fromEntries(data.entries()) });
+    feedback.textContent = 'Message sent! Our team will contact you shortly.';
+    contactForm.reset();
+  });
+
+  contactForm.addEventListener('input', () => {
+    const data = new FormData(contactForm);
+    setAppState({ savedForm: Object.fromEntries(data.entries()) });
+  });
+}
+
+window.addEventListener('hashchange', routeFromHash);
+window.addEventListener('load', () => {
+  const state = getAppState();
+
+  if (state.savedForm && contactForm) {
+    Object.entries(state.savedForm).forEach(([key, value]) => {
+      const input = contactForm.elements.namedItem(key);
+      if (input) input.value = value;
+    });
+  }
+
+  routeFromHash();
+});
